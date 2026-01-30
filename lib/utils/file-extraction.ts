@@ -1,4 +1,3 @@
-import * as pdfParse from "pdf-parse";
 import mammoth from "mammoth";
 
 export async function extractTextFromFile(
@@ -9,7 +8,9 @@ export async function extractTextFromFile(
   const buffer = Buffer.from(arrayBuffer);
 
   if (mimeType === "application/pdf") {
-    const data = await (pdfParse.default || pdfParse)(buffer);
+    // Dynamic import for pdf-parse to handle CommonJS module
+    const pdfParse = (await import("pdf-parse")).default;
+    const data = await pdfParse(buffer);
     return { text: data.text, mimeType };
   } else if (
     mimeType ===
