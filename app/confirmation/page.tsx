@@ -1,10 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function ConfirmationPage() {
+function ConfirmationContent() {
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId");
 
@@ -32,5 +33,21 @@ export default function ConfirmationPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-2xl px-4 py-12">
+          <div className="rounded-lg bg-gray-50 p-8 text-center">
+            <div className="text-lg">Loading...</div>
+          </div>
+        </div>
+      }
+    >
+      <ConfirmationContent />
+    </Suspense>
   );
 }

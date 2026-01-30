@@ -9,7 +9,11 @@ export async function extractTextFromFile(
 
   if (mimeType === "application/pdf") {
     // Dynamic import for pdf-parse to handle CommonJS module
-    const pdfParse = (await import("pdf-parse")).default;
+    const pdfParseModule = await import("pdf-parse");
+    // pdf-parse exports the function directly
+    const pdfParse = pdfParseModule as unknown as (
+      buffer: Buffer
+    ) => Promise<{ text: string }>;
     const data = await pdfParse(buffer);
     return { text: data.text, mimeType };
   } else if (

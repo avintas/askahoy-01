@@ -40,21 +40,6 @@ export default function EditTriviaPage() {
     }
   }, [triviaId, fetchTrivia]);
 
-  const fetchTrivia = async () => {
-    try {
-      const response = await fetch(`/api/trivia/${triviaId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setTrivia(data.trivia);
-        setTitle(data.trivia.title);
-      }
-    } catch (error) {
-      console.error("Error fetching trivia:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const updateQuestion = (
     index: number,
     field: keyof TriviaQuestion,
