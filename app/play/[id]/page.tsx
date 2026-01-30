@@ -78,61 +78,14 @@ export default function PlayTriviaPage() {
   useEffect(() => {
     if (triviaId) {
       fetchTrivia();
-      // Track view after trivia is loaded
-      if (trivia) {
-        trackEvent("view");
-      }
     }
-  }, [triviaId, fetchTrivia, trivia, trackEvent]);
+  }, [triviaId, fetchTrivia]);
 
-  const fetchTrivia = async () => {
-    try {
-      const response = await fetch(`/api/trivia/${triviaId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setTrivia(data.trivia);
-        // Initialize answers array
-        setAnswers(
-          data.trivia.questions.map(() => ({
-            questionIndex: 0,
-            selectedAnswer: null,
-            isCorrect: null,
-          }))
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching trivia:", error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (trivia) {
+      trackEvent("view");
     }
-  };
-
-  const trackEvent = async (
-    eventType: string,
-    questionId?: string,
-    metadata?: Record<string, unknown>
-  ) => {
-    if (!trivia) return;
-
-    try {
-      await fetch("/api/analytics", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          experience_id: trivia.id,
-          project_id: trivia.project_id,
-          user_id: trivia.user_id,
-          event_type: eventType,
-          question_id: questionId,
-          metadata,
-        }),
-      });
-    } catch (error) {
-      console.error("Error tracking event:", error);
-    }
-  };
+  }, [trivia, trackEvent]);
 
   const startQuiz = () => {
     setQuizStarted(true);
