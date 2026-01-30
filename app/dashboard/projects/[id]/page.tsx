@@ -39,22 +39,6 @@ export default function ProjectDetailPage() {
     }
   }, [projectId, fetchProjectDetails]);
 
-  const fetchProjectDetails = async () => {
-    try {
-      const response = await fetch(`/api/projects/${projectId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setProject(data.project);
-        setDocuments(data.documents || []);
-        setTriviaExperiences(data.triviaExperiences || []);
-      }
-    } catch (error) {
-      console.error("Error fetching project details:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (loading) {
     return (
       <ProtectedRoute>
